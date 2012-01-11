@@ -26,6 +26,8 @@ use inc::Module::Install;
 
 all_from 'lib/Test/TypeCheck.pm';
 
+requires 'Test::Builder';
+requires 'Data::Util';
 
 test_requires 'Test::More'     => '0.88';
 test_requires 'Test::Requires' => '0.06';
