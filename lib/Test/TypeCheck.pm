@@ -5,6 +5,35 @@ use warnings;
 
 our $VERSION = '0.01';
 
+use Test::Builder;
+use Data::Util;
+
+sub import {
+    my $self = shift;
+    my $package = caller;
+
+    my $tb = Test::Builder->new;
+
+    no strict 'refs';
+    for my $name (@{ $Data::Util::EXPORT_TAGS{'check'} }) {
+        if ( $name eq "is_instance" ) {
+            *{"$package\::$name"} = sub {
+                my $msg = pop @_
+                    if scalar @_ == 3;
+                $tb->ok(&{"Data::Util::$name"}(@_), $msg);
+            };
+        }
+        else {
+            *{"$package\::$name"} = sub {
+                my $msg = pop @_
+                    if scalar @_ == 2;
+                $tb->ok(&{"Data::Util::$name"}(@_), $msg);
+            };
+        }
+    }
+}
+
+
 
 1;
 __END__
